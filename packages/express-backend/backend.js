@@ -45,6 +45,7 @@ const findUserById = (id) =>
   users["users_list"].find((user) => user["id"] === id);
 
 const addUser = (user) => {
+  user.id = generateId();
   users["users_list"].push(user);
   return user;
 };
@@ -59,6 +60,10 @@ const findUserByIdJob = (name, job) => {
   }
   return result;
 }
+
+const generateId = () => {
+    return Math.random().toString(36).substring(7);
+  };
 
 app.use(cors());
 app.use(express.json());
@@ -90,8 +95,8 @@ app.get("/users/:id", (req, res) => {
 
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
-  addUser(userToAdd);
-  res.send();
+  const newUser = addUser(userToAdd);
+  res.status(201).send(newUser);
 });
 
 app.delete("/users/:id", (req, res) => {
